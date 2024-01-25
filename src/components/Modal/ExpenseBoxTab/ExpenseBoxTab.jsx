@@ -138,7 +138,19 @@ const ExpenseBoxTab = ({
   useEffect(() => {
     if (expenseData && expenseData.date) {
       const { date, hour, minute } = expenseData;
-      const dateStr = `${date} ${hour}:${minute}`;
+      // safari 는  날짜와 시간 문자열을 파싱할 때 다른 브라우저들보다 엄격한 편으로
+      // 날짜 시간이 한자리 수 일때 문제가 발생한다
+      // 예시 -> new Date('2024-1-12 12:55:01'), new Date(2024-05-16 9:0),
+      // 이런식으로 하나라도 글자가 포맷(yyyy-MM-dd HH:mm:ss외 여러개)에 맞지않으면
+      // Invalid time value 에러를 던진다
+      // 따라서 적절하게 한자리수일때는 0 을 붙여준다
+      const formattedHour = hour.toString().padStart(2, '0');
+      const formattedMinute = minute.toString().padStart(2, '0');
+      /**
+        '12'.toString().padStart(2, '0'); >> '12'
+        '3'.toString().padStart(2, '0'); >> '03'
+       */
+      const dateStr = `${date} ${formattedHour}:${formattedMinute}`;
       setInputDate(new Date(dateStr));
     } else if (selectDate && selectDate.year) {
       setInputDate(
@@ -208,7 +220,7 @@ const ExpenseBoxTab = ({
                     className="cursor-pointer"
                     selected={inputDate}
                     onChange={setInputDate}
-                    dateFormat="yy/MM/dd (E) a hh:mm"
+                    dateFormat="yyyy-MM-dd HH:mm:ss"
                     showTimeSelect
                     locale={ko}
                   />
