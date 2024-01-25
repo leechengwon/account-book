@@ -18,7 +18,7 @@ const Gateway = ({ isLogin }) => {
       <div
         className={`${
           isLogin ? 'mt-[100px]' : 'mt-0'
-        }   h-full w-full  lg:bg-right`}
+        } absolute inset-0 aspect-video h-full w-full bg-cover bg-no-repeat  lg:bg-right`}
       />
 
       <main className="relative flex h-full w-full flex-col items-center">
